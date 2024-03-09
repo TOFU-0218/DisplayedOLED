@@ -1,0 +1,51 @@
+ROM
+0.01111000
+    SlaveAddress
+1.00000000
+    Co=0 D/C#=0 この場合次に送信するデータはコマンド
+2.
+
+Register1 # 16bit
+R1
+R2
+
+Flag # 1bit
+FlagACK
+    非承認の場合HIGH 承認の場合LOW
+FlagSended
+    確認用クロックパルスが送信されたらHIGH
+Flag1
+Flag2
+HIGHFLAG
+LOWFLAG
+
+ISA
+計算命令
+ADD DEST SRC
+    DESTにSRCを加算し、DESTに書き込み
+ADDI DEST IMM
+    DESTにIMMを加算し、DESTに書き込み
+SSD1306制御関連
+I2CSTART
+    コントローラ側にi2c通信をスタートする命令を送信する
+    SCLがHの時にSDAをLにする
+I2CSTOP
+    コントローラ側にi2c通信をストップする命令を送信する
+    SCLがHの時にSDAをHにする
+ROM関連命令
+LOAD DEST SRC
+    ROMからSRC番地のデータをDESTレジスタに書き込み
+通信関連命令
+SENDCON SRC
+    SRCレジスタの内容をコントローラに送る
+    レジスタは16bitなので最下位bitから数えて8個目までのbitを送信
+SENDI2C
+    コントローラに保存されたデータをI2Cで送信
+フラグ関連命令
+SETFLAG FLG2 FLG1
+    FLG2にFLG1を書き込み
+条件分岐命令
+BEQ RS2 RS1 IMM
+    RS1、RS2を比較し、値が同じ場合PCにIMMを書き込み
+BEQF FLG2 FLAG2 IMM
+    FLG1、FLG2を比較し、値が同じ場合PCにIMMを書き込み

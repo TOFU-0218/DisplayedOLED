@@ -1,0 +1,6 @@
+I2CSTART # i2c通信スタート
+LOAD R1 # Slave AddressをR1レジスタに保存
+SENDCON R1 # R1レジスタに保存されたデータをコントローラに送信
+SENDI2C # i2c通信でデータを送信
+BEQ FlagSended LOWFLAG 4 # 送信済みフラグがLOWの場合ここでずっとループ
+BEQ FlagACK HIGHFLAG 3 # ACKが非承認の場合送信からやり直し
