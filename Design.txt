@@ -3,7 +3,24 @@ ROM
     SlaveAddress
 1.00000000
     Co=0 D/C#=0 この場合次に送信するデータはコマンド
-2.
+2.10100100
+    RAMコンテンツ表示
+3.10100110
+    RAMコンテンツ表示
+4.10101111
+    ノーマルモードで表示ON
+5.00100111
+    Left Horizontal Scroll
+6.00000000
+    ダミーデータ
+7.*****000
+    スタートページアドレスを設定
+8.*****000
+    フレーム更新のターム内のスクロール間のタイムインターバルを設定する
+9.00000000
+    ダミーデータ
+0.11111111
+    ダミーデータ
 
 Register1 # 16bit
 R1
@@ -23,6 +40,8 @@ ISA
 計算命令
 ADD DEST SRC
     DESTにSRCを加算し、DESTに書き込み
+SUB DEST SRC 
+    DESTからSRCを減算し、DESTに書き込み
 ADDI DEST IMM
     DESTにIMMを加算し、DESTに書き込み
 SSD1306制御関連
@@ -35,6 +54,7 @@ I2CSTOP
 ROM関連命令
 LOAD DEST SRC
     ROMからSRC番地のデータをDESTレジスタに書き込み
+    8bitのデータを16bitに拡張してレジスタに書き込み
 通信関連命令
 SENDCON SRC
     SRCレジスタの内容をコントローラに送る
@@ -49,3 +69,8 @@ BEQ RS2 RS1 IMM
     RS1、RS2を比較し、値が同じ場合PCにIMMを書き込み
 BEQF FLG2 FLAG2 IMM
     FLG1、FLG2を比較し、値が同じ場合PCにIMMを書き込み
+JMP IMM
+    PCにIMMを書き込み
+その他
+NOP
+    何もしない
