@@ -4,13 +4,10 @@ module Decorder(
     output wire [3:0] o_src, // ソースレジスタorフラグ指定
     output wire [7:0] o_imm, // 即値
     output wire [7:0] o_addr, // メモリアドレス
-    output wire [2:0] o_opcode, // ALU命令
+    output wire [2:0] o_alu_ctrl, // ALU命令
     output wire o_rs_wen, // レジスタ書き込み有効化信号
     output wire o_flg_wen, // レジスタ書き込み有効化信号
-    output wire o_i2c_start, // I2C通信開始信号
-    output wire o_i2c_stop, // I2C通信終了信号
-    output wire o_sendcon, // コントローラへの送信信号
-    output wire o_sendi2c, // i2c経由経由でのデータ送信信号
+    output wire o_i2c // i2cコントローラー制御信号
 );
 
 // 命令分解
@@ -18,22 +15,22 @@ module Decorder(
 // [15:12] destraction設定
 // [11:8] source指定
 // [7:0] 即値
-assign [4:0] o_opcode = opcode(i_instr[20:16]);
+assign [4:0] o_alu_ctrl = alu_ctrl(i_instr[20:16]);
 assign [3:0] w_dest = i_instr[19:16];
 assign [3:0] w_src = i_instr[15:12];
 assign [7:0] w_imm = i_instr[7:0];
 
 // ALU命令
-function [2:0] opcode(
+function [2:0] alu_ctrl(
     input [4:0] w_opcode
     );
     case(w_opcode)
-        5'b00000 : opcode = 3'b001; // ADD
-        5'b00010 : opcode = 3'b010; // SUB
-        5'b00101 : opcode = 3'b001; // ADDI
-        5'b10011 : opcode = 3'b011; // BEQ
-        5'b10101 : opcode = 3'b100; // BEQF
-        default : opcode = 3'b000; // NOP
+        5'b00000 : alu_ctrl = 3'b001; // ADD
+        5'b00010 : alu_ctrl = 3'b010; // SUB
+        5'b00101 : alu_ctrl = 3'b001; // ADDI
+        5'b10011 : alu_ctrl = 3'b011; // BEQ
+        5'b10101 : alu_ctrl = 3'b100; // BEQF
+        default : alu_ctrl = 3'b000; // NOP
     endcase
 endfunction
 
