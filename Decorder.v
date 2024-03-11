@@ -78,6 +78,8 @@ function rs_wen(
         5'b00101 : rs_wen = 1'b1; // ADDI
         5'b01010 : rs_wen = 1'b1; // LOAD
         5'b10000 : rs_wen = 1'b1; // SETFLAG
+        5'b10011 : rs_wen = 1'b1; // BEQ
+        5'b10101 : rs_wen = 1'b1; // 
         default : rs_wen = 1'b0;
     endcase
 endfunction
