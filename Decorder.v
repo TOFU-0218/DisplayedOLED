@@ -15,8 +15,8 @@ module Decorder(
 // [11:8] source指定
 // [7:0] 即値
 assign [4:0] o_alu_ctrl = alu_ctrl(i_instr[20:16]); // ALU命令
-assign [3:0] o_dest = i_instr[19:16]; // 目的地レジスタorフラグ指定
-assign [3:0] o_src = i_instr[15:12]; // ソースレジスタorフラグ指定
+assign [3:0] o_dest = i_instr[15:8]; // 目的地レジスタorフラグ指定
+assign [3:0] o_src = src(i_instr[15:12]); // ソースレジスタorフラグ指定
 assign [7:0] o_imm = imm(i_instr); // 即値
 assign [7:0] o_addr = addr(i_instr); // メモリアドレス
 assign o_rs_wen = rs_wen(i_instr[20:16]); // レジスタ書き込み有効化信号
@@ -35,6 +35,16 @@ function [2:0] alu_ctrl(
     endcase
 endfunction
 
+// 即値
+function [7:0] imm(
+    input [20:0] w_instr
+    );
+    if (w_instr[16:16] == 1) begin
+        imm = w_instr[7:0]
+    end else begin
+        imm = 8'b0
+    end
+endfunction
 
 
 endmodule
