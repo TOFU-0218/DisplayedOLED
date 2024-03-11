@@ -19,7 +19,7 @@ assign [3:0] o_dest = i_instr[15:8]; // 目的地レジスタorフラグ指定
 assign [3:0] o_src = src(i_instr[15:12]); // ソースレジスタorフラグ指定
 assign [7:0] o_imm = imm(i_instr); // 即値
 assign [7:0] o_addr = addr(i_instr); // メモリアドレス
-assign o_rs_wen = rs_wen(i_instr[20:16]); // レジスタ書き込み有効化信号
+assign o_rd_wen = rs_wen(i_instr[20:16]); // レジスタ書き込み有効化信号
 
 // ALU命令
 function [2:0] alu_ctrl(
@@ -68,7 +68,7 @@ function [7:0] addr(
 endfunction
 
 // レジスタ書き込み有効化信号
-function w_rs_wen(
+function rs_wen(
     input [4:0] w_opcode
     );
     case(w_opcode)
