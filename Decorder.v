@@ -57,6 +57,7 @@ function [7:0] imm(
     end
 endfunction
 
+// メモリアドレス
 function [7:0] addr(
     input [20:0] w_instr
     );
@@ -66,7 +67,19 @@ function [7:0] addr(
     endcase
 endfunction
 
-
+// レジスタ書き込み有効化信号
+function w_rs_wen(
+    input [4:0] w_opcode
+    );
+    case(w_opcode)
+        5'b00000 : rs_wen = 1'b1; // ADD
+        5'b00010 : rs_wen = 1'b1; // SUB
+        5'b00101 : rs_wen = 1'b1; // ADDI
+        5'b01010 : rs_wen = 1'b1; // LOAD
+        5'b10000 : rs_wen = 1'b1; // SETFLAG
+        default : rs_wen = 1'b0;
+    endcase
+endfunction
 
 endmodule
 
