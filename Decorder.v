@@ -35,6 +35,17 @@ function [2:0] alu_ctrl(
     endcase
 endfunction
 
+// ソース
+function [3:0] src(
+    input [20:0] W_instr
+);
+    if (w_instr[20:16] != 5'b01010) begin
+        src = w_instr[11:8]
+    end else begin
+        src = 4'b0000
+    end
+endfunction
+
 // 即値
 function [7:0] imm(
     input [20:0] w_instr
@@ -45,6 +56,16 @@ function [7:0] imm(
         imm = 8'b0
     end
 endfunction
+
+function [7:0] addr(
+    input [20:0] w_instr
+    );
+    case(w_instr[20:16])
+        5'b01010 : addr = w_instr[7:4]
+        default : addr = 4'b0
+    endcase
+endfunction
+
 
 
 endmodule
