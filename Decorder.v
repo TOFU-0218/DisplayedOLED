@@ -6,7 +6,7 @@ module Decorder(
     output wire [7:0] o_addr, // メモリアドレス
     output wire [2:0] o_alu_ctrl, // ALU命令
     output wire o_rd_wen, // レジスタ書き込み有効化信号
-    output wire o_i2c_ctrl // i2cコントローラー制御信号
+    output wire [2:0] o_i2c_ctrl // i2cコントローラー制御信号
 );
 
 // 命令分解
@@ -20,6 +20,7 @@ assign [3:0] o_src = src(i_instr[15:12]); // ソースレジスタorフラグ指
 assign [7:0] o_imm = imm(i_instr); // 即値
 assign [7:0] o_addr = addr(i_instr); // メモリアドレス
 assign o_rd_wen = rs_wen(i_instr[20:16]); // レジスタ書き込み有効化信号
+assign o_i2c_ctrl = i2c_ctrl(i_instr[20:16]); // i2cコントローラー制御信号
 
 // ALU命令
 function [2:0] alu_ctrl(
@@ -78,6 +79,19 @@ function rs_wen(
         5'b01010 : rs_wen = 1'b1; // LOAD
         5'b10000 : rs_wen = 1'b1; // SETFLAG
         default : rs_wen = 1'b0;
+    endcase
+endfunction
+
+// i2cコントローラー制御信号
+function [2:0]i2c_ctrl(
+    input [4:0] w_opcode
+    );
+    case(w_opcode)
+        5'b00110 : i2c_ctrl = 3'b001 ; // I2CSTART
+        5'b01000 : i2c_ctrl = 3'b010 ; // I2CSTOP
+        5'b01100 : i2c_ctrl = 3'b011 ; // SENDCON
+        5'b01110 : i2c_ctrl = 3'b100 ; // SENDI2C
+        default : i2c_ctrl = 3'b000; // NOP
     endcase
 endfunction
 
