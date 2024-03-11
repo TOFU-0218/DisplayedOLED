@@ -5,9 +5,8 @@ module Decorder(
     output wire [7:0] o_imm, // 即値
     output wire [7:0] o_addr, // メモリアドレス
     output wire [2:0] o_alu_ctrl, // ALU命令
-    output wire o_rs_wen, // レジスタ書き込み有効化信号
-    output wire o_flg_wen, // レジスタ書き込み有効化信号
-    output wire o_i2c // i2cコントローラー制御信号
+    output wire o_rd_wen, // レジスタ書き込み有効化信号
+    output wire o_i2c_ctrl // i2cコントローラー制御信号
 );
 
 // 命令分解
@@ -15,10 +14,12 @@ module Decorder(
 // [15:12] destraction設定
 // [11:8] source指定
 // [7:0] 即値
-assign [4:0] o_alu_ctrl = alu_ctrl(i_instr[20:16]);
-assign [3:0] w_dest = i_instr[19:16];
-assign [3:0] w_src = i_instr[15:12];
-assign [7:0] w_imm = i_instr[7:0];
+assign [4:0] o_alu_ctrl = alu_ctrl(i_instr[20:16]); // ALU命令
+assign [3:0] o_dest = i_instr[19:16]; // 目的地レジスタorフラグ指定
+assign [3:0] o_src = i_instr[15:12]; // ソースレジスタorフラグ指定
+assign [7:0] o_imm = imm(i_instr); // 即値
+assign [7:0] o_addr = addr(i_instr); // メモリアドレス
+assign o_rs_wen = rs_wen(i_instr[20:16]); // レジスタ書き込み有効化信号
 
 // ALU命令
 function [2:0] alu_ctrl(
@@ -34,18 +35,6 @@ function [2:0] alu_ctrl(
     endcase
 endfunction
 
-// I2C通信関連
-assign o_i2c_start = (w_opcode == 5'b00110) ? 1'b1 : 1'b0; // I2CSTART
-assign o_i2c_stop = (w_opcode == 5'b01000) ? 1'b1 : 1'b0; // I2CSTOP
-
-// メモリ関連
-if (w_opcode == 5'b01010) begin
-    assign o_addr = w_src;
-    assign o_dest = w_dest;
-end
-
-// コントローラ制御信号関連
-if (w_opcode == 5'b)
 
 
 endmodule
