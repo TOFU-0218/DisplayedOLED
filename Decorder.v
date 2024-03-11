@@ -14,11 +14,11 @@ module Decorder(
 // [15:12] destraction設定
 // [11:8] source指定
 // [7:0] 即値
-assign [4:0] o_alu_ctrl = alu_ctrl(i_instr[20:16]); // ALU命令
-assign [3:0] o_dest = i_instr[15:8]; // 目的地レジスタorフラグ指定
-assign [3:0] o_src = src(i_instr[15:12]); // ソースレジスタorフラグ指定
-assign [7:0] o_imm = imm(i_instr); // 即値
-assign [7:0] o_addr = addr(i_instr); // メモリアドレス
+assign o_alu_ctrl = alu_ctrl(i_instr[20:16]); // ALU命令
+assign o_dest = i_instr[15:8]; // 目的地レジスタorフラグ指定
+assign o_src = src(i_instr[15:12]); // ソースレジスタorフラグ指定
+assign o_imm = imm(i_instr); // 即値
+assign o_addr = addr(i_instr); // メモリアドレス
 assign o_rd_wen = rs_wen(i_instr[20:16]); // レジスタ書き込み有効化信号
 assign o_i2c_ctrl = i2c_ctrl(i_instr[20:16]); // i2cコントローラー制御信号
 
@@ -38,12 +38,12 @@ endfunction
 
 // ソース
 function [3:0] src(
-    input [20:0] W_instr
-);
+    input [20:0] w_instr
+    );
     if (w_instr[20:16] != 5'b01010) begin
-        src = w_instr[11:8]
+        src = w_instr[11:8];
     end else begin
-        src = 4'b0000
+        src = 4'b0000;
     end
 endfunction
 
@@ -52,9 +52,9 @@ function [7:0] imm(
     input [20:0] w_instr
     );
     if (w_instr[16:16] == 1) begin
-        imm = w_instr[7:0]
+        imm = w_instr[7:0];
     end else begin
-        imm = 8'b0
+        imm = 8'b0;
     end
 endfunction
 
@@ -63,8 +63,8 @@ function [7:0] addr(
     input [20:0] w_instr
     );
     case(w_instr[20:16])
-        5'b01010 : addr = w_instr[7:4]
-        default : addr = 4'b0
+        5'b01010 : addr = w_instr[7:4];
+        default : addr = 4'b0;
     endcase
 endfunction
 
